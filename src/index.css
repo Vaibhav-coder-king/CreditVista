@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Credit Vista — Dark navy + electric blue + gold fintech design system */
+
+@layer base {
+  :root {
+    /* Core dark navy palette (default theme) */
+    --background: 215 60% 10%;            /* #0A1628 deep navy */
+    --foreground: 0 0% 100%;
+
+    --card: 217 47% 16%;                  /* #112240 card navy */
+    --card-foreground: 0 0% 100%;
+
+    --popover: 217 47% 16%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 218 100% 56%;              /* #1E6FFF electric blue */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 218 100% 65%;
+
+    --secondary: 217 40% 22%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 35% 20%;
+    --muted-foreground: 215 25% 70%;
+
+    --accent: 38 91% 55%;                 /* #F5A623 gold */
+    --accent-foreground: 215 60% 10%;
+    --accent-glow: 38 91% 65%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 215 60% 10%;
+
+    --border: 217 40% 25%;
+    --input: 217 40% 22%;
+    --ring: 218 100% 56%;
+
+    --radius: 0.75rem;
+
+    /* Glass + glow effects */
+    --glass-bg: 217 47% 16% / 0.6;
+    --glass-border: 218 100% 65% / 0.15;
+    --glow-primary: 0 0 40px hsl(218 100% 56% / 0.35);
+    --glow-accent: 0 0 40px hsl(38 91% 55% / 0.4);
+    --shadow-card: 0 8px 32px hsl(215 60% 4% / 0.5);
+    --shadow-elevated: 0 20px 60px hsl(215 60% 4% / 0.7);
+
+    /* Score zone colors */
+    --score-very-poor: 0 84% 55%;
+    --score-poor: 25 100% 50%;
+    --score-fair: 48 100% 50%;
+    --score-good: 120 60% 65%;
+    --score-excellent: 120 60% 35%;
+
+    --sidebar-background: 217 47% 14%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 218 100% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 40% 22%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 217 40% 25%;
+    --sidebar-ring: 218 100% 56%;
+  }
+
+  /* Force dark theme always — Credit Vista is a single navy theme */
+  .dark {
+    --background: 215 60% 10%;
+    --foreground: 0 0% 100%;
+    --card: 217 47% 16%;
+    --card-foreground: 0 0% 100%;
+    --popover: 217 47% 16%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 218 100% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 40% 22%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217 35% 20%;
+    --muted-foreground: 215 25% 70%;
+    --accent: 38 91% 55%;
+    --accent-foreground: 215 60% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 40% 25%;
+    --input: 217 40% 22%;
+    --ring: 218 100% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', system-ui, sans-serif;
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-xl border bg-card/60 backdrop-blur-xl;
+    border-color: hsl(var(--glass-border));
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-card-hover {
+    @apply transition-all duration-300 hover:border-primary/40;
+  }
+  .glass-card-hover:hover {
+    box-shadow: var(--shadow-elevated), 0 0 24px hsl(var(--primary) / 0.15);
+    transform: translateY(-2px);
+  }
+
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-glow)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .float-anim {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.7); }
+}
