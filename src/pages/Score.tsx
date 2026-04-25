@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { StepProgress } from "@/components/StepProgress";
 import { ResultsDashboard } from "@/components/ResultsDashboard";
 import { EditableSignalsPanel } from "@/components/EditableSignalsPanel";
@@ -41,6 +42,7 @@ export default function Score() {
   const [manualMode, setManualMode] = useState(false);
   const [manualFeatures, setManualFeatures] = useState<FeatureSet>(DEFAULT_FEATURES);
   const [generating, setGenerating] = useState(false);
+  const [pdfConsentGiven, setPdfConsentGiven] = useState(false);
 
   const validateStep1 = () => {
     const e: Record<string, string> = {};
@@ -102,6 +104,10 @@ export default function Score() {
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    if (!pdfConsentGiven) {
+      toast.error("Please consent to upload your statement first");
+      return;
+    }
     const f = e.dataTransfer.files?.[0];
     if (f) handleFile(f);
   };
@@ -215,10 +221,33 @@ export default function Score() {
 
           {step === 1 && (
             <motion.div key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+              <div className="glass-card p-6 border-l-4 border-primary bg-primary/5">
+                <div className="flex gap-3">
+                  <Checkbox 
+                    id="pdf-consent" 
+                    checked={pdfConsentGiven}
+                    onCheckedChange={(checked) => setPdfConsentGiven(checked as boolean)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="pdf-consent" className="text-sm cursor-pointer">
+                      <span className="font-semibold">I consent to upload and analyze my financial statement</span>
+                      <p className="text-xs text-muted-foreground mt-1 font-normal">
+                        I understand that my statement will be processed locally in my browser. Only behavioral patterns will be extracted, and no raw banking data will be stored or transmitted to external servers.
+                      </p>
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
               <div
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={onDrop}
-                className="glass-card p-10 border-dashed border-2 border-primary/30 hover:border-primary/60 transition text-center"
+                className={`glass-card p-10 border-dashed border-2 transition text-center ${
+                  pdfConsentGiven 
+                    ? "border-primary/30 hover:border-primary/60" 
+                    : "border-muted-foreground/20 opacity-50 cursor-not-allowed"
+                }`}
               >
                 <div className="mx-auto h-16 w-16 rounded-full bg-primary/15 grid place-items-center text-primary mb-4">
                   <FileUp className="h-7 w-7" />
@@ -231,13 +260,20 @@ export default function Score() {
                     type="file"
                     accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
                     className="hidden"
+                    disabled={!pdfConsentGiven}
                     onChange={(e) => {
                       const f = e.target.files?.[0];
-                      if (f) handleFile(f);
+                      if (f && pdfConsentGiven) handleFile(f);
                     }}
                   />
-                  <Button asChild variant="hero">
-                    <label htmlFor="file" className="cursor-pointer">Choose file</label>
+                  <Button 
+                    asChild 
+                    variant="hero"
+                    disabled={!pdfConsentGiven}
+                  >
+                    <label htmlFor="file" className={`cursor-pointer ${!pdfConsentGiven ? "cursor-not-allowed opacity-50" : ""}`}>
+                      {pdfConsentGiven ? "Choose file" : "Consent required to upload"}
+                    </label>
                   </Button>
                 </div>
                 <div className="mt-5 max-w-md mx-auto text-xs text-muted-foreground p-3 rounded-md bg-secondary/40 border border-border">

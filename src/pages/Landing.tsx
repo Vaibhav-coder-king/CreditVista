@@ -105,7 +105,7 @@ export default function Landing() {
             transition={{ duration: 0.5 }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/40 bg-accent/10 text-accent text-xs font-semibold tracking-wide">
-              <Sparkles className="h-3 w-3" /> InnovFest 2026 · Alternative Credit Scoring
+              <Sparkles className="h-3 w-3" /> AETHERAX 2026 · Alternative Credit Scoring
             </div>
             <h1 className="mt-5 font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.05] tracking-tight">
               Banks rejected Ravi.<br />
