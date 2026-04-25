@@ -1,0 +1,175 @@
+================================================================================
+                      CREDIT VISTA DATASET — DESCRIPTION
+================================================================================
+
+OVERVIEW
+--------
+The Credit Vista Dataset is a synthetic yet realistic financial profiling dataset
+designed to simulate creditworthiness assessment of individuals in an Indian
+economic context. It contains 50,000 records and 42 columns covering demographic,
+financial, behavioral, and digital-engagement attributes of users.
+
+The dataset is built for two supervised learning tasks:
+  1. REGRESSION  — Predicting a continuous credit_score (300–900 range)
+  2. CLASSIFICATION — Predicting creditworthy (0 = not creditworthy, 1 = creditworthy)
+
+--------------------------------------------------------------------------------
+BASIC STATISTICS
+--------------------------------------------------------------------------------
+  Total Records    : 50,000
+  Total Features   : 42
+  Target Variables : credit_score (regression), creditworthy (binary classification)
+  Missing Values   : NONE (fully complete dataset)
+  Duplicates       : None (user_id is unique per row)
+
+--------------------------------------------------------------------------------
+COLUMN DICTIONARY
+--------------------------------------------------------------------------------
+
+IDENTIFIER
+  user_id                    — Unique user identifier (e.g., CV000001). Drop before modeling.
+
+DEMOGRAPHICS
+  age                        — Age of the user (range: 21–56 years; mean ≈ 34.8)
+  gender                     — Encoded integer: 0 = Male, 1 = Female
+  gender_label               — String label for gender (redundant with gender)
+  education                  — Encoded: 0=Below_10th, 1=Higher_Secondary, 2=Graduate, 3=Postgraduate
+  education_label            — String label for education (redundant with education)
+  dependents                 — Number of financial dependents (0–5; mean ≈ 2.1)
+
+EMPLOYMENT
+  employment_type            — Encoded: 0=Business_Owner, 1=Govt_Salaried, 2=Gig_Freelance,
+                               3=Private_Salaried, 4=Self_Employed (mapping may vary)
+  employment_type_label      — String label for employment type
+  job_tenure_years           — Years at current job (range: 0.1–35; mean ≈ 5.2)
+  job_changes_5yr            — Number of job changes in past 5 years (0–8; mean ≈ 1.3)
+  has_social_security        — Binary flag: 1 = Has ESI/PF/social security coverage
+  tax_filing                 — Ordinal: 0 = No filing, 1 = Filed, 2 = Regularly filed
+  has_pan                    — Binary flag: 1 = Has PAN card
+
+INCOME & FINANCES
+  declared_monthly_income    — Self-declared monthly income in INR (range: ₹6,240–₹1,76,500)
+  avg_monthly_credit         — Average monthly bank credit (closely correlated with income)
+  annual_income              — Annual income in INR (= ~12 × declared_monthly_income)
+  income_regularity          — Score 0–1 measuring how consistent income is month-over-month
+  savings_ratio              — Proportion of income saved (range: 0–0.53; mean ≈ 0.175)
+  monthly_expenses           — Average monthly expenditure in INR
+
+SPENDING BEHAVIOR
+  spending_discipline        — Score 0–1 reflecting controlled spending habits
+  grocery_spend_variance     — Variance in grocery spending (lower = more disciplined)
+  cash_dependency            — Ratio of cash transactions vs total (lower = more digital)
+
+DIGITAL & UPI ENGAGEMENT
+  upi_txn_count_monthly      — Number of UPI transactions per month (range: 2–89; mean ≈ 38.9)
+  avg_upi_txn_amount         — Average UPI transaction value in INR (range: ₹31–₹3,503)
+  mobile_recharge_consistency— Score 0–1; consistency in mobile recharge payments
+  digital_engagement_score   — Composite score 0–1 measuring overall digital banking activity
+
+PAYMENT BEHAVIOR
+  bill_payment_streak        — Consecutive months of on-time bill payments (0–12)
+  bill_payment_score         — Score 0–12 rating overall bill payment history
+  rent_payment_on_time       — Binary: 1 = Rent consistently paid on time
+  utility_payment_regularity — Score 0–1 for utility payment regularity
+  payment_consistency        — Overall payment consistency score 0–1
+
+LOAN & CREDIT HISTORY
+  has_loan                   — Binary: 1 = Currently has an active loan
+  emi_burden_ratio           — EMI as proportion of monthly income (0 = no loan; max ≈ 0.45)
+  num_active_loans           — Number of currently active loans (0–3)
+  default_history            — Binary: 1 = Has a loan default in history
+
+COMPOSITE INDICES
+  financial_discipline_index — Composite score 0–1 aggregating multiple financial behaviors
+  city_tier                  — 0 = Metro, 1 = Tier2, 2 = Tier3 city
+  city_tier_label            — String label for city tier
+
+TARGET VARIABLES
+  credit_score               — Continuous credit score (range: 300–900; mean ≈ 632; std ≈ 88)
+  creditworthy               — Binary classification target: 1 = creditworthy, 0 = not
+                               (Class balance: ~64.97% creditworthy, ~35.03% not creditworthy)
+  risk_tier                  — Categorical label: Poor | Below Average | Fair | Good | Excellent
+                               (Derived from credit_score; NOT to be used as a model feature)
+
+--------------------------------------------------------------------------------
+FEATURE GROUPS SUMMARY
+--------------------------------------------------------------------------------
+  Category                    # Features
+  ─────────────────────────── ──────────
+  Identifier (drop)                    1
+  Demographics                         7
+  Employment / Stability               6
+  Income & Finances                    5
+  Spending Behavior                    3
+  Digital & UPI Activity               4
+  Payment Behavior                     5
+  Loan & Credit                        4
+  Composite Scores / Indices           4
+  Label-encoded duplicates             5  (drop before modeling)
+  Targets                              3
+
+--------------------------------------------------------------------------------
+LABEL-ENCODED COLUMNS (REDUNDANT WITH NUMERIC COUNTERPARTS)
+--------------------------------------------------------------------------------
+  gender_label        → gender
+  employment_type_label → employment_type
+  city_tier_label     → city_tier
+  education_label     → education
+  risk_tier           → credit_score (ordinal derived)
+
+  ⚠ Drop all string label columns before training to avoid data leakage.
+  ⚠ Drop risk_tier as it is directly derived from credit_score (leakage).
+
+--------------------------------------------------------------------------------
+CORRELATION HIGHLIGHTS (from EDA)
+--------------------------------------------------------------------------------
+  Strongly positively correlated with credit_score:
+    - financial_discipline_index, payment_consistency, bill_payment_score
+    - income_regularity, spending_discipline, savings_ratio
+    - digital_engagement_score, mobile_recharge_consistency
+
+  Strongly negatively correlated with credit_score:
+    - default_history, emi_burden_ratio, cash_dependency
+    - job_changes_5yr, grocery_spend_variance
+
+  Near-redundant feature pairs (high collinearity):
+    - declared_monthly_income ↔ avg_monthly_credit ↔ annual_income
+    - bill_payment_streak ↔ bill_payment_score
+
+--------------------------------------------------------------------------------
+INTENDED MODELING TASKS
+--------------------------------------------------------------------------------
+  Task 1 — REGRESSION
+    Target   : credit_score (continuous, 300–900)
+    Model    : Linear Regression (baseline), XGBoost Regressor (tuned)
+    Metric   : RMSE, MAE, R²
+
+  Task 2 — CLASSIFICATION
+    Target   : creditworthy (binary: 0/1)
+    Model    : Logistic Regression (baseline), XGBoost Classifier (tuned)
+    Metric   : Accuracy, ROC-AUC, F1-Score, Precision, Recall
+
+--------------------------------------------------------------------------------
+DATA QUALITY NOTES
+--------------------------------------------------------------------------------
+  • Zero missing values across all 50,000 rows — no imputation needed.
+  • No obvious outliers beyond domain-expected ranges (high-income individuals).
+  • annual_income is arithmetically derived from declared_monthly_income × 12.
+    Consider dropping annual_income to avoid multicollinearity.
+  • avg_monthly_credit closely tracks declared_monthly_income (likely ~0.98 correlation).
+    Drop one before modeling.
+  • Dataset is synthetic; real-world deployment requires regulatory compliance checks
+    (e.g., RBI Fair Lending guidelines).
+
+--------------------------------------------------------------------------------
+RECOMMENDED PREPROCESSING PIPELINE
+--------------------------------------------------------------------------------
+  1. Drop: user_id, gender_label, employment_type_label, city_tier_label,
+           education_label, risk_tier, annual_income, avg_monthly_credit
+  2. No scaling needed for XGBoost; StandardScaler/MinMaxScaler for Linear models.
+  3. Verify class balance before classification (≈65/35 split is mild; no SMOTE needed).
+  4. Train/Val/Test split: 70% / 15% / 15% (stratified for classification).
+
+================================================================================
+                           END OF DESCRIPTION
+================================================================================
