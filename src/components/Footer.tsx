@@ -45,7 +45,7 @@ export function Footer() {
       <div className="border-t border-border/40">
         <div className="container py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Credit Vista. Prototype — not an official credit assessment.</p>
-          <p className="text-accent">Built for InnovFest 2026</p>
+          <p className="text-accent">Built for AETHERAX 2026</p>
         </div>
       </div>
     </footer>

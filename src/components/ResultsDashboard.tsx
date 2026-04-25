@@ -39,7 +39,7 @@ ${result.recommendations.map((r, i) => `  ${i + 1}. ${r}`).join("\n")}
 LIKELY LOAN OPTIONS:
 ${result.loanOptions.map((l) => `  - ${l}`).join("\n")}
 
-Disclaimer: Credit Vista is a demonstration prototype for InnovFest 2026.
+Disclaimer: Credit Vista is a demonstration prototype for AETHERAX 2026.
 Scores are generated from behavioural signals and do not constitute an
 official credit assessment.
 `;

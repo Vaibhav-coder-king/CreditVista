@@ -158,7 +158,7 @@ export default function About() {
       <section className="glass-card p-8 max-w-3xl mx-auto text-center">
         <h3 className="font-display text-xl font-semibold">Disclaimer</h3>
         <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-          Credit Vista is a demonstration prototype for InnovFest 2026. Scores are generated from
+          Credit Vista is a demonstration prototype for AETHERAX 2026. Scores are generated from
           behavioural signals on synthetic or user-uploaded data and do not constitute official
           credit assessments. No data is transmitted off-device.
         </p>
